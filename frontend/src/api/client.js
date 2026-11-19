@@ -1,17 +1,32 @@
 import axios from 'axios';
 
 const TOKEN_KEY = 'notes_app_token';
+let memoryToken = null;
 
 export function getToken() {
-  return localStorage.getItem(TOKEN_KEY);
+  try {
+    return localStorage.getItem(TOKEN_KEY) ?? memoryToken;
+  } catch {
+    return memoryToken;
+  }
 }
 
 export function setToken(token) {
-  localStorage.setItem(TOKEN_KEY, token);
+  memoryToken = token;
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch {
+    memoryToken = token;
+  }
 }
 
 export function clearToken() {
-  localStorage.removeItem(TOKEN_KEY);
+  memoryToken = null;
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    memoryToken = null;
+  }
 }
 
 const client = axios.create({

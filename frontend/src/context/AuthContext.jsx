@@ -16,7 +16,11 @@ export function AuthProvider({ children }) {
     client
       .get('/auth/me')
       .then((res) => setUser(res.data.user))
-      .catch(() => clearToken())
+      .catch((err) => {
+        if (err?.response?.status === 401) {
+          clearToken();
+        }
+      })
       .finally(() => setRestoring(false));
   }, []);
 
