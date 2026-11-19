@@ -4,7 +4,12 @@ import logger from './utils/logger.js';
 import { connectDB } from './config/db.js';
 
 async function start() {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (err) {
+    logger.error(err.message);
+    throw err;
+  }
 
   app.listen(config.port, () => {
     logger.info(`API listening on http://localhost:${config.port} (${config.env})`);
